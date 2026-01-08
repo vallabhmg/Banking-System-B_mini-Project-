@@ -3,7 +3,7 @@
 #2)User#In this user have to register on Website(i.e on vtm Bank)
 #3)Account Manager#In this user can perform Trasanction of money and also Check the  Available Balance
 #4)Banking App#In this,the main Class is Present and handle the all above classes 
-
+*/
 
 #package Banking_System_Project;
 import java.sql.*;
