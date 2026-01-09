@@ -16,7 +16,7 @@ this.con=con;
 this.inp=inp; 
 }
 
-public void creditmoney throws SQLException{
+public void creditmoney(long uaccno) throws SQLException{
 inp.nextLine();
 System.out.println("\nEnter Amount:");
 double camount=inp.nextDouble();

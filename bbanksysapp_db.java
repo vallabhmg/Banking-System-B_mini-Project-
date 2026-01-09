@@ -8,6 +8,7 @@
 #package Banking_System_Project;
 import java.sql.*;
 import java.util.Scanner;
+
 public class bbanksysapp_db{
 private static final String url="jdbc:mysql://localhost:3306/vtmbank_sys";
 private static final String username="root";
@@ -24,8 +25,9 @@ try{
 Connection con=DriverManager.getConnection(url,usrname,password);
 Scanner inp =new Scanner(System.in);
 
-Accounts usersaccount = new Accounts(con,inp);
-AccountsManager usersmanager= new AccountsManager(con,inp);
+bbanksysacc_db accounts=new bbanksysacc_db(con,inp);
+bbanksysaccmgr_db accManager= new bbanksysaccmgr_db(con,inp);
+bbanksysuser_db user=new bbanksysuser_db(con,inp);
 
 String email;
 long account_number;
@@ -40,16 +42,80 @@ int choice1 = inp.nextInt();
 switch(choice1){
 case 1:
 user.register();
+System.out.flush();
+break;
 
+case 2:
+email=user.login();
+if(email!=null){
+System.out.println();
+System.out.println("User Logged In!);
+if(!accounts.accountexits(email)){
+System.out.println();
+System.out.println("1>-Open a new Bank Account");
+System.out.println("2>-Exit");
+if(inp.nextInt()==1){
+account_number=accounts.openacc(email);
+System.out.println("Account is Created Successfully");
+System.out.println("Your Account Number is:",account_number);
+}else{
+break;
 }
 }
-}catch(){
+account_number=accounts.getacc_number(email);
+int choice2=0;
+while(choice2 != 5){
+System.out.println();
+System.out.println("1>-Debit Money");
+System.out.println("2>-Credit Money");
+System.out.println("3>-Transfer Money");
+System.out.println("4>-Check Balance");
+System.out.println("5>-Log Out");
+System.out.println("\nEnter Your Choice:");
+choice2=inp.nextline();
+switch(choice2){
+case 1:
+accManager.debitmoney(account_number);
+break;
+case 2:
+accManager.creditmoney(account_number);
+break;
+case 3:
+accManager.transfermoney(account_number);
+break;
+case 4:
+accManager.getBalance(account_number);
+break;
+case 5:
+break;
+default:
+System.out.println("Enter Valid Choice!");
+break;
+}
+}
+}
+else{
+System.out.println("Incorrect Email or Password!!!");
+}
 
+case 3:
+System.out.println("\nThankyou For Using VTM Banking SYSTEM");
+System.out.println("Stay Safe,Be Aware from fake Bank Fraud");
+System.out.println("Exiting System!");
+return;
 
+defualt:
+System.out.println("Enter Valid Choice");
+break;
+}
+}
+}catch(SQLExcepetion e){
+//e.printStackTrace();
+System.out.println(e.getMessage);
 }
 
 
 
 
-}
-}
+}//upper switch
+}//end of class
