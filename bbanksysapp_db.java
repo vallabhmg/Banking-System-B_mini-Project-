@@ -5,24 +5,28 @@
 #4)Banking App#In this,the main Class is Present and handle the all above classes 
 */
 
-#package Banking_System_Project;
+
+package Banking_System_Project;
 import java.sql.*;
 import java.util.Scanner;
+//import java.lang.Class.forName;
 
 public class bbanksysapp_db{
 private static final String url="jdbc:mysql://localhost:3306/vtmbank_sys";
 private static final String username="root";
 private static final String password="rootadmin15";
-public static void main(String args) throws ClassNotFoundException, SQLException {
+
+public static void main(String[] args){
 try{
 Class.forName("com.mysql.cj.jdbc.Driver");
 System.out.print("\nDriver Loaded Successfully\n");
-}catch(ClassNotFoundException e{
+}catch(ClassNotFoundException e){
 System.out.println("\nOOPS ErrorOccurs"); 
-System.out.println(e.getmessage());
+System.out.println(e.getMessage());
 }
+
 try{
-Connection con=DriverManager.getConnection(url,usrname,password);
+Connection con=DriverManager.getConnection(url,username,password);
 Scanner inp =new Scanner(System.in);
 
 bbanksysacc_db accounts=new bbanksysacc_db(con,inp);
@@ -31,6 +35,7 @@ bbanksysuser_db user=new bbanksysuser_db(con,inp);
 
 String email;
 long account_number;
+
 while(true){
 System.out.println("\n***** WELCOME TO THE ONLINE VTM BANKING SYSTEM *****\n");
 System.out.println();
@@ -39,6 +44,8 @@ System.out.println("<Button>(2) Login");
 System.out.println("<Button>(3) Exit");
 System.out.println("Enter Your Button Choice:");
 int choice1 = inp.nextInt();
+inp.nextLine();
+
 switch(choice1){
 case 1:
 user.register();
@@ -49,21 +56,26 @@ case 2:
 email=user.login();
 if(email!=null){
 System.out.println();
-System.out.println("User Logged In!);
+System.out.println("User Logged In!");
+
 if(!accounts.accountexits(email)){
 System.out.println();
 System.out.println("1>-Open a new Bank Account");
 System.out.println("2>-Exit");
+System.out.println("Enter Your Choice!=");
+
 if(inp.nextInt()==1){
 account_number=accounts.openacc(email);
 System.out.println("Account is Created Successfully");
-System.out.println("Your Account Number is:",account_number);
+System.out.println("Your Account Number is:"+account_number);
 }else{
 break;
 }
 }
+
 account_number=accounts.getacc_number(email);
 int choice2=0;
+
 while(choice2 != 5){
 System.out.println();
 System.out.println("1>-Debit Money");
@@ -72,31 +84,37 @@ System.out.println("3>-Transfer Money");
 System.out.println("4>-Check Balance");
 System.out.println("5>-Log Out");
 System.out.println("\nEnter Your Choice:");
-choice2=inp.nextline();
+choice2=inp.nextInt();
+inp.nextLine();
+
 switch(choice2){
 case 1:
 accManager.debitmoney(account_number);
 break;
+
 case 2:
 accManager.creditmoney(account_number);
 break;
+
 case 3:
 accManager.transfermoney(account_number);
 break;
+
 case 4:
 accManager.getBalance(account_number);
 break;
+
 case 5:
 break;
+
 default:
 System.out.println("Enter Valid Choice!");
-break;
 }
 }
-}
-else{
+}else{
 System.out.println("Incorrect Email or Password!!!");
 }
+break;
 
 case 3:
 System.out.println("\nThankyou For Using VTM Banking SYSTEM");
@@ -106,16 +124,12 @@ return;
 
 defualt:
 System.out.println("Enter Valid Choice");
-break;
+//break;
 }
 }
-}catch(SQLExcepetion e){
+}catch(SQLException e){
 //e.printStackTrace();
 System.out.println(e.getMessage);
 }
-
-
-
-
 }//upper switch
 }//end of class
