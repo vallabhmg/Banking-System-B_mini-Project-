@@ -9,7 +9,7 @@
 package Banking_System_Project;
 import java.sql.*;
 import java.util.Scanner;
-//import java.lang.Class.forName;
+//import java.lang.forName;
 
 public class bbanksysapp_db{
 private static final String url="jdbc:mysql://localhost:3306/vtmbank_sys";
@@ -23,6 +23,7 @@ System.out.print("\nDriver Loaded Successfully\n");
 }catch(ClassNotFoundException e){
 System.out.println("\nOOPS ErrorOccurs"); 
 System.out.println(e.getMessage());
+return;
 }
 
 try{
@@ -49,7 +50,7 @@ inp.nextLine();
 switch(choice1){
 case 1:
 user.register();
-System.out.flush();
+//System.out.flush();
 break;
 
 case 2:
@@ -74,6 +75,7 @@ break;
 }
 
 account_number=accounts.getacc_number(email);
+
 int choice2=0;
 
 while(choice2 != 5){
@@ -122,14 +124,15 @@ System.out.println("Stay Safe,Be Aware from fake Bank Fraud");
 System.out.println("Exiting System!");
 return;
 
-defualt:
+default:
 System.out.println("Enter Valid Choice");
 //break;
 }
 }
 }catch(SQLException e){
 //e.printStackTrace();
-System.out.println(e.getMessage);
+System.out.println(e.getMessage());
 }
-}//upper switch
-}//end of class
+}
+}
+//end of class

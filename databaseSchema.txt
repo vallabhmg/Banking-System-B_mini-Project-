@@ -1,0 +1,29 @@
+Note= Before Try to Run This Program make sure you downleded JDBC java MysqlDatabase Connector
+
+-- CREATE DATABASE vtmbank_sys;
+#USE vtmbank_sys;
+
+/*CREATE TABLE vtmbank_acc (
+uaccno BIGINT PRIMARY KEY,
+ufull_name VARCHAR(225) NOT NULL,
+uemail VARCHAR(45) UNIQUE,
+balance DECIMAL(10,2),
+usecurity_pin CHAR(4) NOT NULL
+);
+*/
+
+--DESCRIBE vtmbank_acc;
+SELECT * FROM vtmbank_acc;
+
+CREATE TABLE vtmbank_users(
+ufull_name VARCHAR(225) NOT NULL,
+uemailvtmbank_users VARCHAR(45) PRIMARY KEY,
+upassword CHAR(225) NOT NULL
+);
+
+--DESCRIBE vtmbank_users;
+SELECT * FROM vtmbank_users; 
+
+
+#DROP TABLE vtmbank_acc;
+#DROP TABLE vtmbank_users;

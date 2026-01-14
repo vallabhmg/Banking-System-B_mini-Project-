@@ -3,6 +3,7 @@ This is a Class which provide Functionallity to the User to perform Bank Transac
 Following are the Methods to Allows the User for Transactions are as follow:-
 */
 
+package Banking_System_Project;
 import java.util.Scanner;
 import java.sql.*;
 
@@ -26,14 +27,14 @@ String uspin=inp.nextLine();
 try{
 con.setAutoCommit(false);
 if(uaccno!=0){
-PreparedStatement pstat=con.prepareStatement("SELECT * FROM vtmbank_acc WHERE uaccno = ? AND uspin = ?");
+PreparedStatement pstat=con.prepareStatement("SELECT * FROM vtmbank_acc WHERE uaccno = ? AND usecurity_pin = ?");
 pstat.setLong(1,uaccno);
 pstat.setString(2,uspin);
 ResultSet rans=pstat.executeQuery();
 
 if(rans.next()){
-String creditquery="UPDATE vtmbank_acc SET ubalance = ubalance + ? WHERE uaccno = ?";
-PreparedStatement pstat=con.prepareStatement(creditquery);
+String creditquery="UPDATE vtmbank_acc SET balance = balance + ? WHERE uaccno = ?";
+pstat=con.prepareStatement(creditquery);
 pstat.setDouble(1,camount);
 pstat.setLong(2,uaccno);
 int rowsaffected=pstat.executeUpdate();
@@ -53,7 +54,7 @@ System.out.println("\nInvalid Pin!!!");
 }
 }catch(SQLException e){
 System.out.println("Opps Error Occurs!");
-System.out.println(e.getMesssage);
+System.out.println(e.getMessage());
 }
 con.setAutoCommit(true);
 
@@ -67,22 +68,25 @@ double damount=inp.nextDouble();
 inp.nextLine();
 System.out.println("\nEnter Security Pin:");
 String uspin=inp.nextLine();
+
 try{
 con.setAutoCommit(false);
 if(uaccno!=0){
-PreparedStatement pstat=con.prepareStatement("SELECT * FROM vtmbank_acc WHERE uaccno = ? AND uspin = ?");
+PreparedStatement pstat=con.prepareStatement("SELECT * FROM vtmbank_acc WHERE uaccno = ? AND usecurity_pin = ?");
 pstat.setLong(1,uaccno);
 pstat.setString(2,uspin);
 ResultSet rans=pstat.executeQuery();
 
 if(rans.next()){
-double ucurrentbal=ans.getDouble(ubalance);
+double ucurrentbal=rans.getDouble("balance");
 if(damount<ucurrentbal){
-String creditquery="UPDATE vtmbank_acc SET ubalance = ubalance - ? WHERE uaccno = ?";
-PreparedStatement pstat=con.prepareStatement(creditquery);
+String debitquery="UPDATE vtmbank_acc SET balance = balance - ? WHERE uaccno = ?";
+pstat=con.prepareStatement(debitquery);
 pstat.setDouble(1,damount);
 pstat.setLong(2,uaccno);
+
 int rowsaffected=pstat.executeUpdate();
+
 if(rowsaffected >0){
 System.out.println("\nAmount Debited Successfully");
 con.commit();
@@ -102,7 +106,7 @@ System.out.println("\nInvalid Pin!!!");
 }
 }catch(SQLException e){
 System.out.println("Opps Error Occurs!");
-System.out.println(e.getMesssage);
+System.out.println(e.getMessage());
 }
 con.setAutoCommit(true);
 }
@@ -111,15 +115,17 @@ con.setAutoCommit(true);
 
 public void transfermoney(long sender_accno) throws SQLException{
 inp.nextLine();
-System.out.print(Enter Receiver Account Number:);
+System.out.println("\nEnter Receiver Account Number:");
 long receiver_accno =inp.nextLong();
 System.out.print("Enter Amount:");
 double amount = inp.nextDouble();
 inp.nextLine();
 System.out.print("Enter Security Pin:");
 String spin=inp.nextLine();
+
 try{
 con.setAutoCommit(false);
+	
 if(sender_accno !=0 && receiver_accno !=0){
 PreparedStatement pstat=con.prepareStatement("SELECT * FROM vtmbank_acc WHERE uaccno = ? AND usecurity_pin = ?");
 pstat.setLong(1,sender_accno);
@@ -131,8 +137,8 @@ double current_bal=rans.getDouble("balance");
 if(amount<=current_bal){
 String debit_query="UPDATE vtmbank_acc SET balance=balance - ? WHERE uaccno=?";
 String credit_query="UPDATE vtmbank_acc SET balance=balance + ? WHERE uaccno=?";
-PreparedStatement dpstat=con.prepareStatement(dredit_query);
-PreparedStatement cpstat=con.prepareStatement(cebit_query);
+PreparedStatement dpstat=con.prepareStatement(debit_query);
+PreparedStatement cpstat=con.prepareStatement(credit_query);
 dpstat.setDouble(1,amount);
 dpstat.setLong(2,sender_accno);
 
@@ -143,14 +149,14 @@ int senderrowAffect= dpstat.executeUpdate();
 int receiverrowAffect= cpstat.executeUpdate();
 if(senderrowAffect > 0 && receiverrowAffect > 0){
 System.out.println("transaction Successful!");
-System.out.println("RS"+Amount+"Transferred Successfully");
+System.out.println("RS"+amount+"Transferred Successfully");
 con.commit();
 con.setAutoCommit(true);
 return;
 }else{
 System.out.println("\nTransaction Failed");
 con.rollback();
-con.setAuroCommit(true);
+con.setAutoCommit(true);
 }
 }else{
 System.out.println("\nInsufficient Balance!!");
@@ -167,22 +173,26 @@ e.printStackTrace();
 con.setAutoCommit(true);
 }
 
+
 public void getBalance(long uaccno){
 inp.nextLine();
 System.out.println("\nEnter Security Pin:");
 String spin=inp.nextLine();
+String query="SELECT balance FROM  vtmbank_acc WHERE uaccno = ? AND usecurity_pin = ?";
+
 try{
-PreparedStatement pstat=con.pstat("SELECT balance FROM  vtmbank_acc WHERE uaccno = ? AND usecurity_pin = ?");
+PreparedStatement pstat=con.prepareStatement(query);
 pstat.setLong(1,uaccno);
 pstat.setString(2,spin);
+
 ResultSet rans=pstat.executeQuery();
-if(resultSet.next()){
+if(rans.next()){
 double balance=rans.getDouble("balance");
-System.out.println("Balance:",balance);
+System.out.println("Balance:"+balance);
 }else{
 System.out.println("\nError You Entered Invalid Pin");
 }
-}catch(){
+}catch(SQLException e){
 e.printStackTrace();
 }
 }

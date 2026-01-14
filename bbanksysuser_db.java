@@ -31,7 +31,7 @@ System.out.println("User Allready Exists for this Email Address!!");
 return;
 }
 
-String registerquery="INSERT INTO vtmbank_users(ufull_name,uemailvtmbank_users,upassword) VALUES(?,?,?)";
+String registerquery="INSERT INTO vtmbank_users(ufull_name,uemailvtmbank_users,upassword) VALUES(?, ?, ?)";
 try{
 //Below,are Statement(Query) Creation
 
@@ -50,7 +50,7 @@ System.out.println("Registration Failed");
 }
 }catch(SQLException e){
 System.out.print("\nOOPs Error Occurrss\n");
-System.out.print("\ne.getMessage()");
+System.out.print(e.getMessage());
 }
 }
 
@@ -81,7 +81,7 @@ return null;
 
 
 public boolean userexist(String uemail){
-String userexquery="Select * FROM user WHERE uemailvtmbank_users= ?";
+String userexquery="SELECT * FROM vtmbank_users WHERE uemailvtmbank_users = ?";
 
 try{
 PreparedStatement pstat=con.prepareStatement(userexquery);
